@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject, QTimer, Slot, Signal
+from PySide6.QtCore import QObject, QTimer, Slot
 
 from .heater import Heater
 from .temperature_card import TemperatureCard
@@ -33,25 +33,9 @@ class Controller(QObject):
     def set_active(self, active: bool):
         """ Set mode (MODE_IDLE or MODE_ACTIVE """
         self._active = active
-        self.active_changed.emit()
-
-    def get_active(self):
-        return self._active
-
-    @Signal
-    def active_changed(self):
-        ...
-
-    def get_target(self):
-        return self._target
 
     def set_target(self, target: float):
         self._target = target
-        self.target_changed.emit()
-
-    @Signal
-    def target_changed(self):
-        ...
 
     def set_max_pwm(self, max_pwm: float):
         self._max_pwm = max_pwm

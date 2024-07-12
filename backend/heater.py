@@ -76,11 +76,6 @@ class Heater(QObject):
         if not self._simulate:
             self._gpio_request.set_value(self.GPIO_HEATER,
                                          Value.ACTIVE if on else Value.INACTIVE)
-        self.state_changed.emit()
-
-    @Signal
-    def state_changed(self):
-        ...
 
 
 if __name__ == "__main__":

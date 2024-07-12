@@ -71,7 +71,7 @@ class Micrometer(QObject):
     def _on_ready_read(self):
         """ Handle incoming serial port bytes """
         if self._simulate:
-            self._measurement = self._simulation_temperature * 0.01 #+ random.uniform(-0.001,0.001)
+            self._measurement = self._simulation_temperature * 0.01  + random.uniform(-0.001,0.001)
             self.measurement_changed.emit()  # Signal send there is a new value
         else:
             self._data = self._data + bytes(self._serial.readAll()).decode()  # Todo type mismatch

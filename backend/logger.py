@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from typing import List
 
@@ -17,6 +18,7 @@ class Logger(QObject):
 
         self._temperature_card = temperature_card
         self._micrometers = micrometers
+        self._logging_folder = os.getcwd()
         self._filename = datetime.now().strftime("%Y%m%d_%H%M%S") + ".txt"
 
         self._timer = QTimer()
@@ -24,16 +26,18 @@ class Logger(QObject):
         self._timer.timeout.connect(self._on_log)
 
     def set_logging_interval(self, interval: float):
-        self._timer.setInterval(interval*1000)
-        print(interval)
+        self._timer.setInterval(int(interval * 1000))
+
+    def set_logging_folder(self, logging_folder: str):
+        self._logging_folder = logging_folder
 
     def set_active(self, active):
         if active:
-            self._filename = datetime.now().strftime("%Y%m%d_%H%M%S")+".txt"
+            self._filename = datetime.now().strftime("%Y%m%d_%H%M%S") + ".txt"
             with open(self._filename, "at") as fp:
                 fp.write(f"DateTime\t")  # TODO log formatting
                 for idx in range(8):
-                    fp.write(f"Temperatuur {1+idx}\t")  # TODO log formatting
+                    fp.write(f"Temperatuur {1 + idx}\t")  # TODO log formatting
                 for idx in range(2):
                     fp.write(f"Lengte {1 + idx}\t")  # TODO log formatting
                 fp.write(f"\n")  # TODO log formatting
@@ -49,8 +53,8 @@ class Logger(QObject):
         for micrometer in self._micrometers:
             lengths.append(micrometer.get_measurement())  # Triggering by GUI, TODO autonomous triggering?
 
-
-        with open(self._filename, "at") as fp:
+        filepath = os.path.join(self._logging_folder, self._filename)
+        with open(filepath, "at") as fp:
             fp.write(f"{datetime.now().isoformat()}\t")  # TODO log formatting
             for idx in range(8):
                 fp.write(f"{temperatures[idx]}\t")  # TODO log formatting

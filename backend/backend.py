@@ -20,12 +20,9 @@ class Backend(QObject):
         self._heater = Heater(SIMULATE)
         self._heater.pwm_changed.connect(self.heater_pwm_changed)
         self._heater.pwm_changed.connect(self._on_heater_pwm_changed)
-        self._heater.state_changed.connect(self.heater_state_changed)
         self._heater.disable()
 
         self._controller = Controller(self._temperature_card, self._heater)
-        self._controller.active_changed.connect(self.controller_active_changed)
-        self._controller.target_changed.connect(self.controller_target_changed)
 
         self._micrometer_1 = Micrometer('AGCQj137C01', SIMULATE)
         self._micrometer_1.measurement_changed.connect(self.micrometer_1_measurement_changed)
@@ -63,29 +60,17 @@ class Backend(QObject):
     def get_heater_state(self):
         return self._heater.get_state()
 
-    @Signal
-    def heater_state_changed(self):
-        ...
-
     def set_controller_active(self, active):
         return self._controller.set_active(active)
 
     def get_controller_active(self):
         return self._controller.get_active()
 
-    @Signal
-    def controller_active_changed(self):
-        ...
-
     def set_controller_target(self, target):
         return self._controller.set_target(target)
 
     def get_controller_target(self):
         return self._controller.get_target()
-
-    @Signal
-    def controller_target_changed(self):
-        ...
 
     def set_controller_max_pwm(self, max_pwm):
         self._controller.set_max_pwm(max_pwm)
@@ -95,7 +80,6 @@ class Backend(QObject):
 
     def get_controller_max_pwm(self):
         return self._controller.get_max_pwm()
-
 
     def get_micrometer_1_measurement(self):
         return self._micrometer_1.get_measurement()
@@ -116,3 +100,6 @@ class Backend(QObject):
 
     def set_logging_interval(self, interval):
         self._logger.set_logging_interval(interval)
+
+    def set_logging_folder(self, logging_folder):
+        self._logger.set_logging_folder(logging_folder)
